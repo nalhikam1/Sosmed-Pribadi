@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utas — Jurnal Pribadi</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --bg-primary: #FAFAF8;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #F3F2EF;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6B6B6B;
+    --text-tertiary: #9B9B9B;
+    --accent: #C84B31;
+    --accent-light: #FFF0EC;
+    --accent-hover: #A83D28;
+    --border: #E8E6E1;
+    --border-light: #F0EDE8;
+    --heart: #E8443A;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html.dark {
+    --bg-primary: #0D0D0D;
+    --bg-secondary: #1A1A1A;
+    --bg-tertiary: #242424;
+    --text-primary: #F0EDE8;
+    --text-secondary: #9B9B9B;
+    --text-tertiary: #6B6B6B;
+    --accent: #E8664D;
+    --accent-light: #2A1A16;
+    --accent-hover: #F07A63;
+    --border: #2A2A2A;
+    --border-light: #222222;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.3);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app-container {
+    max-width: 620px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Header */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-light);
+    padding: 16px 20px;
+    backdrop-filter: blur(20px);
+    background: color-mix(in srgb, var(--bg-primary) 85%, transparent);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    font-style: italic;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: -2px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    font-size: 15px;
+  }
+
+  .icon-btn:hover {
+    background: var(--border);
+    color: var(--text-primary);
+    transform: scale(1.05);
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-primary);
+  }
+
+  .tab {
+    flex: 1;
+    padding: 14px 0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition);
+    user-select: none;
+  }
+
+  .tab.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--text-primary);
+  }
+
+  .tab:hover:not(.active) { color: var(--text-secondary); }
+
+  /* Composer */
+  .composer {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+  }
+
+  .composer-inner { display: flex; gap: 14px; }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), #E87461);
+  }
+
+  .avatar.sm {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .composer-body { flex: 1; min-width: 0; }
+
+  .composer-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+  }
+
+  .composer-input {
+    width: 100%;
+    min-height: 60px;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-primary);
+    background: transparent;
+    padding: 0;
+    overflow-y: auto;
+  }
+
+  .composer-input::placeholder { color: var(--text-tertiary); }
+
+  /* Attachment preview in composer */
+  .attachment-preview-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .attach-thumb {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    animation: fadeUp 0.3s ease;
+  }
+
+  .attach-thumb img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .attach-thumb .file-thumb {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .attach-thumb .file-thumb i {
+    font-size: 24px;
+    color: var(--accent);
+  }
+
+  .attach-thumb .file-name {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-align: center;
+    word-break: break-all;
+    line-height: 1.3;
+    max-width: 70px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .attach-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.65);
+    border: none;
+    color: #fff;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .composer-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+
+  .composer-tools { display: flex; gap: 4px; }
+
+  .tool-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    font-size: 16px;
+  }
+
+  .tool-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--accent);
+  }
+
+  .char-count {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .post-btn {
+    padding: 10px 24px;
+    border-radius: 24px;
+    border: none;
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.2px;
+  }
+
+  .post-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+  }
+
+  .post-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Feed */
+  .feed { padding-bottom: 100px; }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 40px;
+    animation: fadeUp 0.6s ease;
+  }
+
+  .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.2; }
+
+  .empty-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .empty-desc {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+  }
+
+  /* Thread Post */
+  .thread-post {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-light);
+    transition: var(--transition);
+    animation: fadeUp 0.4s ease;
+    position: relative;
+  }
+
+  .thread-post:hover {
+    background: color-mix(in srgb, var(--bg-tertiary) 30%, transparent);
+  }
+
+  .post-main { display: flex; gap: 14px; }
+
+  .post-line-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 44px;
+  }
+
+  .post-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border);
+    margin-top: 8px;
+    border-radius: 1px;
+  }
+
+  .post-content { flex: 1; min-width: 0; }
+
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .post-author { font-weight: 600; font-size: 15px; color: var(--text-primary); }
+
+  .post-time {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .post-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .post-mood {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+  }
+
+  /* Attachments in posts */
+  .post-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .post-attach-item {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+  }
+
+  .post-attach-item:hover { transform: scale(1.02); box-shadow: var(--shadow-md); }
+
+  .post-attach-item img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .post-attach-file {
+    width: 120px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--bg-tertiary);
+    padding: 12px;
+  }
+
+  .post-attach-file i { font-size: 28px; color: var(--accent); }
+
+  .post-attach-file span {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: center;
+    word-break: break-all;
+    line-height: 1.3;
+    max-width: 100px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .post-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    transition: var(--transition);
+  }
+
+  .action-btn:hover { background: var(--bg-tertiary); color: var(--text-secondary); }
+  .action-btn.liked { color: var(--heart); }
+  .action-btn.liked:hover { background: #FEE8E7; }
+  html.dark .action-btn.liked:hover { background: #2A1616; }
+  .action-btn .count { font-variant-numeric: tabular-nums; }
+
+  .heart-anim { animation: heartPop 0.35s ease; }
+
+  /* Replies */
+  .replies-section { margin-top: 4px; }
+
+  .reply-item {
+    padding: 14px 20px 14px 78px;
+    border-bottom: 1px solid var(--border-light);
+    animation: fadeUp 0.3s ease;
+  }
+
+  .reply-inner { display: flex; gap: 12px; }
+  .reply-content { flex: 1; min-width: 0; }
+
+  .reply-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .reply-author { font-weight: 600; font-size: 14px; }
+  .reply-time { font-size: 12px; color: var(--text-tertiary); margin-left: auto; }
+
+  .reply-text {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Reply attachments */
+  .reply-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .reply-attach-item {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .reply-attach-item:hover { transform: scale(1.03); }
+
+  .reply-attach-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .reply-attach-file {
+    width: 80px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: var(--bg-tertiary);
+    padding: 8px;
+  }
+
+  .reply-attach-file i { font-size: 20px; color: var(--accent); }
+
+  .reply-attach-file span {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-align: center;
+    word-break: break-all;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  .reply-actions { display: flex; gap: 4px; margin-top: 8px; }
+
+  .reply-composer {
+    padding: 14px 20px 14px 78px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-tertiary);
+  }
+
+  .reply-composer-row { display: flex; gap: 10px; align-items: flex-start; }
+
+  .reply-input {
+    flex: 1;
+    min-height: 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    outline: none;
+    resize: none;
+    transition: var(--transition);
+    overflow-y: auto;
+  }
+
+  .reply-input:focus { border-color: var(--accent); }
+  .reply-input::placeholder { color: var(--text-tertiary); }
+
+  .reply-tools { display: flex; gap: 4px; align-items: center; }
+
+  .reply-send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition);
+    font-size: 14px;
+  }
+
+  .reply-send-btn:hover { opacity: 0.8; }
+  .reply-send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* Mood selector */
+  .mood-selector {
+    display: none;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+    animation: fadeUp 0.3s ease;
+  }
+
+  .mood-selector.show { display: flex; }
+
+  .mood-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-secondary);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .mood-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .mood-chip.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* Search */
+  .search-bar {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .search-input-wrap { position: relative; }
+
+  .search-input-wrap i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-tertiary);
+    font-size: 14px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    outline: none;
+    transition: var(--transition);
+  }
+
+  .search-input:focus { border-color: var(--accent); background: var(--bg-secondary); }
+  .search-input::placeholder { color: var(--text-tertiary); }
+
+  /* Stats panel */
+  .stats-panel {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .stat-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .stat-number {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  /* Export/Import panel */
+  .export-import-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ei-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .ei-btn:hover { background: var(--border); }
+  .ei-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .ei-btn.primary:hover { background: var(--accent-hover); }
+  .ei-btn.danger { background: transparent; color: var(--heart); border-color: var(--heart); }
+  .ei-btn.danger:hover { background: #FEE8E7; }
+  html.dark .ei-btn.danger:hover { background: #2A1616; }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .lightbox img {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    animation: scaleUp 0.25s ease;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+
+  .lightbox-close:hover { background: rgba(255,255,255,0.25); }
+
+  /* Delete confirm modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-box {
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    padding: 28px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    animation: scaleUp 0.25s ease;
+  }
+
+  .modal-title { font-family: 'Instrument Serif', serif; font-size: 22px; margin-bottom: 8px; }
+
+  .modal-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  .modal-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .modal-btn:hover { background: var(--border); }
+  .modal-btn.danger { background: var(--heart); color: #fff; border-color: var(--heart); }
+  .modal-btn.danger:hover { opacity: 0.85; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 1000;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-lg);
+    white-space: nowrap;
+    max-width: calc(100vw - 40px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Storage indicator */
+  .storage-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+
+  .storage-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+
+  .storage-label {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+    text-align: right;
+  }
+
+  /* Link Cards */
+  .link-cards-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .link-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-tertiary);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.3s ease;
+  }
+
+  .link-card:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .link-card-favicon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    object-fit: contain;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    padding: 3px;
+  }
+
+  .link-card-favicon-fallback {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    font-size: 13px;
+  }
+
+  .link-card-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .link-card-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+
+  .link-card-domain {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .link-card-arrow {
+    color: var(--text-tertiary);
+    font-size: 11px;
+    flex-shrink: 0;
+    transition: var(--transition);
+  }
+
+  .link-card:hover .link-card-arrow {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+
+  .link-card-remove {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.15);
+    border: none;
+    color: var(--text-secondary);
+    font-size: 9px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+  }
+
+  .link-card:hover .link-card-remove { opacity: 1; }
+  .link-card-remove:hover { background: var(--heart); color: #fff; }
+
+  /* Link input modal */
+  .link-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    display: flex;
+    align-items: flex-end;
+    padding: 0;
+    animation: fadeIn 0.2s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .link-modal-box {
+    background: var(--bg-secondary);
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 24px 20px 36px;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .link-modal-handle {
+    width: 36px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .link-modal-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    font-style: italic;
+    margin-bottom: 4px;
+  }
+
+  .link-modal-sub {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-bottom: 16px;
+  }
+
+  .link-modal-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    outline: none;
+    transition: var(--transition);
+    margin-bottom: 10px;
+  }
+
+  .link-modal-input:focus { border-color: var(--accent); background: var(--bg-secondary); }
+  .link-modal-input::placeholder { color: var(--text-tertiary); }
+
+  .link-modal-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .link-modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .link-modal-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .link-modal-btn.cancel {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+  }
+
+  .link-modal-btn.confirm {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    border-color: var(--text-primary);
+  }
+
+  .link-modal-btn.confirm:hover { opacity: 0.85; }
+  .link-modal-btn.cancel:hover { background: var(--border); }
+  .link-modal-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* Link preview chips in composer */
+  .link-preview-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .link-preview-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--accent-light);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 8px;
+    animation: fadeUp 0.25s ease;
+  }
+
+  .link-preview-chip img {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    object-fit: contain;
+  }
+
+  .link-chip-info { flex: 1; min-width: 0; }
+
+  .link-chip-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .link-chip-domain {
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .link-chip-remove {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .link-chip-remove:hover { color: var(--heart); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scaleUp {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes heartPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .reply-item { padding-left: 58px; }
+    .reply-composer { padding-left: 58px; }
+    .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat-card { padding: 12px 8px; }
+    .stat-number { font-size: 26px; }
+    .post-attach-item img { width: 90px; height: 90px; }
+    .post-attach-file { width: 90px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-inner">
+      <div>
+        <div class="logo">Utas</div>
+        <div class="logo-sub">Jurnal Pribadi</div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="searchToggle" title="Cari">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="icon-btn" id="statsToggle" title="Statistik & Ekspor">
+          <i class="fas fa-chart-simple"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="all">Semua</div>
+    <div class="tab" data-tab="favorites">Favorit</div>
+  </div>
+
+  <!-- Search bar -->
+  <div class="search-bar" id="searchBar" style="display:none;">
+    <div class="search-input-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" class="search-input" id="searchInput" placeholder="Cari utas atau balasan...">
+    </div>
+  </div>
+
+  <!-- Stats + Export panel -->
+  <div class="stats-panel" id="statsPanel" style="display:none;">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="statPosts">0</div>
+        <div class="stat-label">Utas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statReplies">0</div>
+        <div class="stat-label">Balasan</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statLikes">0</div>
+        <div class="stat-label">Suka</div>
+      </div>
+    </div>
+    <div class="storage-bar"><div class="storage-fill" id="storageFill" style="width:0%"></div></div>
+    <div class="storage-label" id="storageLabel">Memuat...</div>
+    <div class="export-import-row" style="margin-top:14px;">
+      <button class="ei-btn primary" id="exportBtn">
+        <i class="fas fa-file-export"></i> Ekspor Semua
+      </button>
+      <button class="ei-btn" id="importBtn">
+        <i class="fas fa-file-import"></i> Impor Data
+      </button>
+      <input type="file" id="importFile" accept=".json" style="display:none;">
+      <button class="ei-btn danger" id="clearAllBtn">
+        <i class="fas fa-trash"></i> Hapus Semua
+      </button>
+    </div>
+  </div>
+
+  <!-- Composer -->
+  <div class="composer">
+    <div class="composer-inner">
+      <div class="avatar">A</div>
+      <div class="composer-body">
+        <div class="composer-name">Naufal Muhammad Al Hikam</div>
+        <textarea class="composer-input" id="composerInput" placeholder="Apa yang sedang kamu pikirkan?" rows="2"></textarea>
+        <div class="attachment-preview-area" id="attachPreview"></div>
+        <div class="link-preview-chips" id="linkPreview"></div>
+        <div class="mood-selector" id="moodSelector"></div>
+        <div class="composer-footer">
+          <div class="composer-tools">
+            <button class="tool-btn" id="moodToggle" title="Mood">
+              <i class="far fa-face-smile"></i>
+            </button>
+            <button class="tool-btn" id="attachToggle" title="Lampirkan Gambar/File">
+              <i class="fas fa-paperclip"></i>
+            </button>
+            <input type="file" id="attachInput" multiple accept="image/*,.pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx" style="display:none;">
+            <button class="tool-btn" id="linkToggle" title="Tambah Link">
+              <i class="fas fa-link"></i>
+            </button>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span class="char-count" id="charCount">0 karakter</span>
+            <button class="post-btn" id="postBtn" disabled>Posting</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feed -->
+  <div class="feed" id="feed"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  "use strict";
+
+  // Dark mode
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    document.documentElement.classList.add("dark");
+  }
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(e) {
+    document.documentElement.classList[e.matches ? "add" : "remove"]("dark");
+  });
+
+  // ── Storage helpers ──────────────────────────────────────────────
+  var STORAGE_KEY = "utas_data_v2";
+
+  function loadData() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var d = JSON.parse(raw);
+        return d;
+      }
+    } catch(e) { console.warn("Load error", e); }
+    return null;
+  }
+
+  function saveData() {
+    try {
+      var payload = JSON.stringify({ posts: posts, nextId: nextId });
+      localStorage.setItem(STORAGE_KEY, payload);
+      updateStorageDisplay();
+    } catch(e) {
+      if (e.name === "QuotaExceededError") {
+        showToast("⚠️ Penyimpanan penuh! Hapus beberapa lampiran lama.");
+      } else {
+        console.warn("Save error", e);
+      }
+    }
+  }
+
+  function getStorageSize() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? new Blob([raw]).size : 0;
+    } catch(e) { return 0; }
+  }
+
+  function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1048576) return (bytes/1024).toFixed(1) + " KB";
+    return (bytes/1048576).toFixed(2) + " MB";
+  }
+
+  function updateStorageDisplay() {
+    var size = getStorageSize();
+    var maxSize = 5 * 1024 * 1024; // ~5MB estimate
+    var pct = Math.min(100, Math.round(size / maxSize * 100));
+    var fill = document.getElementById("storageFill");
+    var label = document.getElementById("storageLabel");
+    if (fill) {
+      fill.style.width = pct + "%";
+      fill.style.background = pct > 80 ? "var(--heart)" : pct > 50 ? "#E8A33D" : "var(--accent)";
+    }
+    if (label) label.textContent = "Terpakai: " + formatBytes(size) + " (~" + pct + "%)";
+  }
+
+  // ── Data ─────────────────────────────────────────────────────────
+  var posts = [];
+  var nextId = 1;
+  var currentTab = "all";
+  var searchQuery = "";
+  var selectedMood = null;
+  var pendingAttachments = []; // [{name, type, data (base64), isImage}]
+  var pendingLinks = []; // [{url, title, domain}]
+
+  // Load from localStorage
+  var stored = loadData();
+  if (stored && stored.posts) {
+    posts = stored.posts;
+    nextId = stored.nextId || (posts.length + 1);
+  }
+
+  var moods = [
+    { emoji: "😊", label: "Senang" },
+    { emoji: "🤔", label: "Berpikir" },
+    { emoji: "😌", label: "Tenang" },
+    { emoji: "😢", label: "Sedih" },
+    { emoji: "😡", label: "Kesal" },
+    { emoji: "🥰", label: "Bersyukur" },
+    { emoji: "💪", label: "Semangat" },
+    { emoji: "😴", label: "Lelah" },
+    { emoji: "✨", label: "Terinspirasi" },
+    { emoji: "🎵", label: "Santai" }
+  ];
+
+  // ── DOM ───────────────────────────────────────────────────────────
+  var composerInput = document.getElementById("composerInput");
+  var charCount = document.getElementById("charCount");
+  var postBtn = document.getElementById("postBtn");
+  var feed = document.getElementById("feed");
+  var moodSelector = document.getElementById("moodSelector");
+  var moodToggle = document.getElementById("moodToggle");
+  var searchToggle = document.getElementById("searchToggle");
+  var searchBar = document.getElementById("searchBar");
+  var searchInput = document.getElementById("searchInput");
+  var statsToggle = document.getElementById("statsToggle");
+  var statsPanel = document.getElementById("statsPanel");
+  var toastEl = document.getElementById("toast");
+  var attachToggle = document.getElementById("attachToggle");
+  var attachInput = document.getElementById("attachInput");
+  var attachPreview = document.getElementById("attachPreview");
+  var linkToggle = document.getElementById("linkToggle");
+  var linkPreview = document.getElementById("linkPreview");
+
+  // ── Mood chips ────────────────────────────────────────────────────
+  moods.forEach(function(mood) {
+    var chip = document.createElement("button");
+    chip.className = "mood-chip";
+    chip.textContent = mood.emoji + " " + mood.label;
+    chip.setAttribute("data-mood", mood.label);
+    chip.addEventListener("click", function() {
+      if (selectedMood === mood.label) {
+        selectedMood = null;
+        chip.classList.remove("selected");
+      } else {
+        selectedMood = mood.label;
+        moodSelector.querySelectorAll(".mood-chip").forEach(function(c) { c.classList.remove("selected"); });
+        chip.classList.add("selected");
+      }
+    });
+    moodSelector.appendChild(chip);
+  });
+
+  // ── Tabs ──────────────────────────────────────────────────────────
+  document.querySelectorAll(".tab").forEach(function(tab) {
+    tab.addEventListener("click", function() {
+      document.querySelectorAll(".tab").forEach(function(t) { t.classList.remove("active"); });
+      tab.classList.add("active");
+      currentTab = tab.getAttribute("data-tab");
+      renderFeed();
+    });
+  });
+
+  // ── Composer input (UNLIMITED) ────────────────────────────────────
+  composerInput.addEventListener("input", function() {
+    var len = composerInput.value.length;
+    charCount.textContent = len.toLocaleString("id") + " karakter";
+    charCount.className = "char-count";
+    updatePostBtn();
+    autoResize(composerInput);
+  });
+
+  function autoResize(el) {
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 400) + "px";
+  }
+
+  // ── Mood toggle ───────────────────────────────────────────────────
+  moodToggle.addEventListener("click", function() {
+    moodSelector.classList.toggle("show");
+  });
+
+  // ── Search ────────────────────────────────────────────────────────
+  searchToggle.addEventListener("click", function() {
+    var visible = searchBar.style.display !== "none";
+    searchBar.style.display = visible ? "none" : "block";
+    if (!visible) {
+      searchInput.focus();
+      statsPanel.style.display = "none";
+    } else {
+      searchQuery = "";
+      searchInput.value = "";
+      renderFeed();
+    }
+  });
+
+  searchInput.addEventListener("input", function() {
+    searchQuery = searchInput.value.toLowerCase();
+    renderFeed();
+  });
+
+  // ── Stats ─────────────────────────────────────────────────────────
+  statsToggle.addEventListener("click", function() {
+    var visible = statsPanel.style.display !== "none";
+    statsPanel.style.display = visible ? "none" : "block";
+    if (!visible) {
+      searchBar.style.display = "none";
+      updateStats();
+      updateStorageDisplay();
+    }
+  });
+
+  function updateStats() {
+    document.getElementById("statPosts").textContent = posts.length;
+    var totalReplies = 0, totalLikes = 0;
+    posts.forEach(function(p) {
+      totalReplies += p.replies.length;
+      totalLikes += p.likes;
+      p.replies.forEach(function(r) { totalLikes += r.likes; });
+    });
+    document.getElementById("statReplies").textContent = totalReplies;
+    document.getElementById("statLikes").textContent = totalLikes;
+  }
+
+  // ── Attachment handling ───────────────────────────────────────────
+  attachToggle.addEventListener("click", function() { attachInput.click(); });
+
+  attachInput.addEventListener("change", function() {
+    var files = Array.from(attachInput.files);
+    files.forEach(function(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var attach = {
+          name: file.name,
+          type: file.type,
+          data: e.target.result, // base64 data URL
+          isImage: file.type.startsWith("image/"),
+          size: file.size
+        };
+        pendingAttachments.push(attach);
+        renderAttachPreview();
+        updatePostBtn();
+      };
+      reader.readAsDataURL(file);
+    });
+    attachInput.value = "";
+  });
+
+  function renderAttachPreview() {
+    attachPreview.innerHTML = "";
+    pendingAttachments.forEach(function(att, idx) {
+      var thumb = document.createElement("div");
+      thumb.className = "attach-thumb";
+      if (att.isImage) {
+        thumb.innerHTML = '<img src="' + att.data + '" alt="' + escapeHTML(att.name) + '">';
+      } else {
+        thumb.innerHTML =
+          '<div class="file-thumb">' +
+            '<i class="' + fileIcon(att.type) + '"></i>' +
+            '<span class="file-name">' + escapeHTML(att.name) + '</span>' +
+          '</div>';
+      }
+      var removeBtn = document.createElement("button");
+      removeBtn.className = "attach-remove";
+      removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      removeBtn.addEventListener("click", function() {
+        pendingAttachments.splice(idx, 1);
+        renderAttachPreview();
+        updatePostBtn();
+      });
+      thumb.appendChild(removeBtn);
+      attachPreview.appendChild(thumb);
+    });
+  }
+
+  function fileIcon(type) {
+    if (type.includes("pdf")) return "fas fa-file-pdf";
+    if (type.includes("word") || type.includes("document")) return "fas fa-file-word";
+    if (type.includes("excel") || type.includes("spreadsheet")) return "fas fa-file-excel";
+    if (type.includes("powerpoint") || type.includes("presentation")) return "fas fa-file-powerpoint";
+    if (type.includes("text")) return "fas fa-file-lines";
+    return "fas fa-file";
+  }
+
+  // ── Link handling ─────────────────────────────────────────────────
+  function getDomain(url) {
+    try {
+      return new URL(url).hostname.replace("www.", "");
+    } catch(e) { return url; }
+  }
+
+  function getFaviconUrl(url) {
+    try {
+      var origin = new URL(url).origin;
+      return "https://www.google.com/s2/favicons?domain=" + encodeURIComponent(origin) + "&sz=64";
+    } catch(e) { return null; }
+  }
+
+  function renderLinkPreview() {
+    linkPreview.innerHTML = "";
+    pendingLinks.forEach(function(lnk, idx) {
+      var chip = document.createElement("div");
+      chip.className = "link-preview-chip";
+      var faviconUrl = getFaviconUrl(lnk.url);
+      chip.innerHTML =
+        (faviconUrl ? '<img src="' + faviconUrl + '" onerror="this.style.display=\'none\'">' : '') +
+        '<div class="link-chip-info">' +
+          '<div class="link-chip-title">' + escapeHTML(lnk.title || lnk.domain) + '</div>' +
+          '<div class="link-chip-domain">' + escapeHTML(lnk.domain) + '</div>' +
+        '</div>' +
+        '<button class="link-chip-remove"><i class="fas fa-times"></i></button>';
+      chip.querySelector(".link-chip-remove").addEventListener("click", function() {
+        pendingLinks.splice(idx, 1);
+        renderLinkPreview();
+        updatePostBtn();
+      });
+      linkPreview.appendChild(chip);
+    });
+  }
+
+  function updatePostBtn() {
+    var hasText = composerInput.value.trim().length > 0;
+    var hasAttach = pendingAttachments.length > 0;
+    var hasLinks = pendingLinks.length > 0;
+    postBtn.disabled = !(hasText || hasAttach || hasLinks);
+  }
+
+  function showLinkModal() {
+    var overlay = document.createElement("div");
+    overlay.className = "link-modal-overlay";
+    overlay.innerHTML =
+      '<div class="link-modal-box">' +
+        '<div class="link-modal-handle"></div>' +
+        '<div class="link-modal-title">Tambah Link</div>' +
+        '<div class="link-modal-sub">Paste URL artikel, sosmed, atau website apapun</div>' +
+        '<div class="link-modal-label">URL</div>' +
+        '<input type="url" class="link-modal-input" id="linkUrlInput" placeholder="https://...">' +
+        '<div class="link-modal-label">Judul <span style="color:var(--text-tertiary);font-weight:400;text-transform:none;letter-spacing:0">(opsional — bisa dikosongkan)</span></div>' +
+        '<input type="text" class="link-modal-input" id="linkTitleInput" placeholder="Masukkan judul atau biarkan kosong">' +
+        '<div class="link-modal-actions">' +
+          '<button class="link-modal-btn cancel">Batal</button>' +
+          '<button class="link-modal-btn confirm" id="linkConfirmBtn" disabled>Tambahkan</button>' +
+        '</div>' +
+      '</div>';
+
+    var urlInput = overlay.querySelector("#linkUrlInput");
+    var titleInput = overlay.querySelector("#linkTitleInput");
+    var confirmBtn = overlay.querySelector("#linkConfirmBtn");
+
+    urlInput.addEventListener("input", function() {
+      confirmBtn.disabled = urlInput.value.trim().length === 0;
+    });
+
+    overlay.querySelector(".cancel").addEventListener("click", function() { overlay.remove(); });
+    overlay.addEventListener("click", function(e) { if (e.target === overlay) overlay.remove(); });
+
+    confirmBtn.addEventListener("click", function() {
+      var url = urlInput.value.trim();
+      if (!url) return;
+      if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+      var title = titleInput.value.trim();
+      var domain = getDomain(url);
+      pendingLinks.push({ url: url, title: title || domain, domain: domain });
+      renderLinkPreview();
+      updatePostBtn();
+      overlay.remove();
+    });
+
+    // also submit on Enter in title field
+    titleInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" && !confirmBtn.disabled) confirmBtn.click();
+    });
+
+    document.body.appendChild(overlay);
+    setTimeout(function() { urlInput.focus(); }, 100);
+  }
+
+  linkToggle.addEventListener("click", showLinkModal);
+
+  // ── Post ──────────────────────────────────────────────────────────
+  postBtn.addEventListener("click", doPost);
+
+  composerInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      if (!postBtn.disabled) doPost();
+    }
+  });
+
+  function doPost() {
+    var text = composerInput.value.trim();
+    if (!text && pendingAttachments.length === 0) return;
+
+    var moodData = null;
+    if (selectedMood) {
+      var moodObj = moods.find(function(m) { return m.label === selectedMood; });
+      if (moodObj) moodData = { emoji: moodObj.emoji, label: moodObj.label };
+    }
+
+    var post = {
+      id: nextId++,
+      text: text,
+      mood: moodData,
+      attachments: pendingAttachments.slice(),
+      links: pendingLinks.slice(),
+      likes: 0,
+      liked: false,
+      replies: [],
+      replyOpen: false,
+      timestamp: Date.now()
+    };
+
+    posts.unshift(post);
+    saveData();
+
+    composerInput.value = "";
+    charCount.textContent = "0 karakter";
+    charCount.className = "char-count";
+    postBtn.disabled = true;
+    selectedMood = null;
+    moodSelector.classList.remove("show");
+    moodSelector.querySelectorAll(".mood-chip").forEach(function(c) { c.classList.remove("selected"); });
+    composerInput.style.height = "auto";
+    pendingAttachments = [];
+    renderAttachPreview();
+    pendingLinks = [];
+    renderLinkPreview();
+
+    showToast("Utas berhasil diposting! ✓");
+    renderFeed();
+  }
+
+  // ── Export / Import ───────────────────────────────────────────────
+  document.getElementById("exportBtn").addEventListener("click", function() {
+    var payload = JSON.stringify({ posts: posts, nextId: nextId, exportedAt: new Date().toISOString() }, null, 2);
+    var blob = new Blob([payload], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "utas-backup-" + new Date().toISOString().slice(0,10) + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Data berhasil diekspor!");
+  });
+
+  document.getElementById("importBtn").addEventListener("click", function() {
+    document.getElementById("importFile").click();
+  });
+
+  document.getElementById("importFile").addEventListener("change", function() {
+    var file = this.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        var d = JSON.parse(e.target.result);
+        if (!d.posts || !Array.isArray(d.posts)) throw new Error("Format tidak valid");
+        showDeleteConfirm(
+          "Impor akan menggabungkan data lama dengan data baru. Lanjutkan?",
+          "Gabungkan",
+          function() {
+            // merge by ID
+            var existingIds = new Set(posts.map(function(p) { return p.id; }));
+            var imported = 0;
+            d.posts.forEach(function(p) {
+              if (!existingIds.has(p.id)) {
+                posts.push(p);
+                imported++;
+              }
+            });
+            // Re-sort by timestamp desc
+            posts.sort(function(a,b) { return b.timestamp - a.timestamp; });
+            nextId = Math.max(nextId, d.nextId || nextId) + 1;
+            saveData();
+            renderFeed();
+            showToast(imported + " utas berhasil diimpor!");
+          }
+        );
+      } catch(err) {
+        showToast("⚠️ File tidak valid: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+    this.value = "";
+  });
+
+  document.getElementById("clearAllBtn").addEventListener("click", function() {
+    showDeleteConfirm(
+      "Semua utas, balasan, dan lampiran akan dihapus permanen. Pastikan sudah ekspor datamu!",
+      "Hapus Semua",
+      function() {
+        posts = [];
+        nextId = 1;
+        saveData();
+        renderFeed();
+        showToast("Semua data dihapus.");
+        updateStats();
+      },
+      true
+    );
+  });
+
+  // ── Time ago ──────────────────────────────────────────────────────
+  function timeAgo(ts) {
+    var diff = Date.now() - ts;
+    var sec = Math.floor(diff / 1000);
+    if (sec < 60) return "baru saja";
+    var min = Math.floor(sec / 60);
+    if (min < 60) return min + "m";
+    var hr = Math.floor(min / 60);
+    if (hr < 24) return hr + "j";
+    var day = Math.floor(hr / 24);
+    if (day < 30) return day + "h";
+    var month = Math.floor(day / 30);
+    return month + "bln";
+  }
+
+  // ── Toast ─────────────────────────────────────────────────────────
+  var toastTimer = null;
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { toastEl.classList.remove("show"); }, 2800);
+  }
+
+  // ── Delete confirm ────────────────────────────────────────────────
+  function showDeleteConfirm(message, actionLabel, onConfirm, isDanger) {
+    actionLabel = actionLabel || "Hapus";
+    var overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    overlay.innerHTML =
+      '<div class="modal-box">' +
+        '<div class="modal-title">Konfirmasi</div>' +
+        '<div class="modal-desc">' + message + '</div>' +
+        '<div class="modal-actions">' +
+          '<button class="modal-btn cancel-btn">Batal</button>' +
+          '<button class="modal-btn ' + (isDanger !== false ? 'danger' : '') + ' confirm-btn">' + actionLabel + '</button>' +
+        '</div>' +
+      '</div>';
+
+    overlay.querySelector(".cancel-btn").addEventListener("click", function() { overlay.remove(); });
+    overlay.querySelector(".confirm-btn").addEventListener("click", function() { overlay.remove(); onConfirm(); });
+    overlay.addEventListener("click", function(e) { if (e.target === overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+  }
+
+  // ── Lightbox ──────────────────────────────────────────────────────
+  function openLightbox(src) {
+    var lb = document.createElement("div");
+    lb.className = "lightbox";
+    lb.innerHTML = '<img src="' + src + '"><button class="lightbox-close"><i class="fas fa-times"></i></button>';
+    lb.querySelector(".lightbox-close").addEventListener("click", function() { lb.remove(); });
+    lb.addEventListener("click", function(e) { if (e.target === lb) lb.remove(); });
+    document.body.appendChild(lb);
+  }
+
+  function downloadFile(att) {
+    var a = document.createElement("a");
+    a.href = att.data;
+    a.download = att.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  // ── Render attachments ────────────────────────────────────────────
+  function buildAttachmentsHTML(attachments, sizeClass) {
+    if (!attachments || attachments.length === 0) return null;
+
+    var container = document.createElement("div");
+    container.className = sizeClass === "sm" ? "reply-attachments" : "post-attachments";
+
+    attachments.forEach(function(att) {
+      var item = document.createElement("div");
+      item.className = sizeClass === "sm" ? "reply-attach-item" : "post-attach-item";
+
+      if (att.isImage) {
+        if (sizeClass === "sm") {
+          item.innerHTML = '<img src="' + att.data + '" alt="' + escapeHTML(att.name) + '">';
+        } else {
+          item.innerHTML = '<img src="' + att.data + '" alt="' + escapeHTML(att.name) + '">';
+        }
+        item.addEventListener("click", function() { openLightbox(att.data); });
+      } else {
+        var iconClass = fileIcon(att.type || "");
+        if (sizeClass === "sm") {
+          item.innerHTML = '<div class="reply-attach-file"><i class="' + iconClass + '"></i><span>' + escapeHTML(att.name) + '</span></div>';
+        } else {
+          item.innerHTML = '<div class="post-attach-file"><i class="' + iconClass + '"></i><span>' + escapeHTML(att.name) + '</span></div>';
+        }
+        item.addEventListener("click", function() { downloadFile(att); });
+        item.title = "Klik untuk unduh " + att.name;
+      }
+
+      container.appendChild(item);
+    });
+
+    return container;
+  }
+
+  // ── Render feed ───────────────────────────────────────────────────
+  function renderFeed() {
+    feed.innerHTML = "";
+    var filtered = posts.slice();
+
+    if (currentTab === "favorites") {
+      filtered = filtered.filter(function(p) { return p.liked; });
+    }
+
+    if (searchQuery) {
+      filtered = filtered.filter(function(p) {
+        var matchPost = p.text.toLowerCase().indexOf(searchQuery) !== -1;
+        var matchMood = p.mood && p.mood.label.toLowerCase().indexOf(searchQuery) !== -1;
+        var matchReply = p.replies.some(function(r) { return r.text.toLowerCase().indexOf(searchQuery) !== -1; });
+        return matchPost || matchMood || matchReply;
+      });
+    }
+
+    if (filtered.length === 0) {
+      var emptyMsg = currentTab === "favorites"
+        ? "Belum ada utas favorit.<br>Ketuk ❤️ untuk menyimpan."
+        : searchQuery
+          ? "Tidak ditemukan hasil untuk \"" + escapeHTML(searchQuery) + "\""
+          : "Belum ada utas.<br>Mulai tulis pikiranmu di atas.";
+
+      feed.innerHTML =
+        '<div class="empty-state">' +
+          '<div class="empty-icon">✍️</div>' +
+          '<div class="empty-title">Kosong</div>' +
+          '<div class="empty-desc">' + emptyMsg + '</div>' +
+        '</div>';
+      return;
+    }
+
+    filtered.forEach(function(post) {
+      feed.appendChild(createPostElement(post));
+    });
+  }
+
+  function escapeHTML(str) {
+    if (!str) return "";
+    var div = document.createElement("div");
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  // ── Create post element ───────────────────────────────────────────
+  function createPostElement(post) {
+    var wrapper = document.createElement("div");
+    var hasReplies = post.replies.length > 0 || post.replyOpen;
+
+    var postDiv = document.createElement("div");
+    postDiv.className = "thread-post";
+    postDiv.setAttribute("data-id", post.id);
+
+    var moodHTML = post.mood
+      ? '<div class="post-mood">' + post.mood.emoji + " " + escapeHTML(post.mood.label) + '</div>'
+      : "";
+
+    postDiv.innerHTML =
+      '<div class="post-main">' +
+        '<div class="post-line-container">' +
+          '<div class="avatar">A</div>' +
+          (hasReplies ? '<div class="post-line"></div>' : '') +
+        '</div>' +
+        '<div class="post-content">' +
+          '<div class="post-header">' +
+            '<span class="post-author">Naufal Muhammad Al Hikam</span>' +
+            '<span class="post-time">' + timeAgo(post.timestamp) + '</span>' +
+          '</div>' +
+          (post.text ? '<div class="post-text">' + escapeHTML(post.text) + '</div>' : '') +
+          '<div class="post-attachments-slot"></div>' +
+          moodHTML +
+          '<div class="post-actions">' +
+            '<button class="action-btn like-btn ' + (post.liked ? 'liked' : '') + '">' +
+              '<i class="' + (post.liked ? 'fas' : 'far') + ' fa-heart"></i>' +
+              '<span class="count">' + (post.likes > 0 ? post.likes : '') + '</span>' +
+            '</button>' +
+            '<button class="action-btn reply-toggle-btn">' +
+              '<i class="far fa-comment"></i>' +
+              '<span class="count">' + (post.replies.length > 0 ? post.replies.length : '') + '</span>' +
+            '</button>' +
+            '<button class="action-btn delete-btn">' +
+              '<i class="far fa-trash-can"></i>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    // Inject attachments
+    var attSlot = postDiv.querySelector(".post-attachments-slot");
+    if (post.attachments && post.attachments.length > 0) {
+      var attEl = buildAttachmentsHTML(post.attachments, "lg");
+      if (attEl) attSlot.appendChild(attEl);
+    }
+
+    // Inject link cards
+    if (post.links && post.links.length > 0) {
+      var linksContainer = document.createElement("div");
+      linksContainer.className = "link-cards-area";
+      post.links.forEach(function(lnk) {
+        var card = document.createElement("a");
+        card.className = "link-card";
+        card.href = lnk.url;
+        card.target = "_blank";
+        card.rel = "noopener noreferrer";
+        var faviconUrl = getFaviconUrl(lnk.url);
+        card.innerHTML =
+          (faviconUrl
+            ? '<img class="link-card-favicon" src="' + faviconUrl + '" onerror="this.outerHTML=\'<div class=\\\"link-card-favicon-fallback\\\"><i class=\\\"fas fa-globe\\\"></i></div>\'">'
+            : '<div class="link-card-favicon-fallback"><i class="fas fa-globe"></i></div>') +
+          '<div class="link-card-info">' +
+            '<div class="link-card-title">' + escapeHTML(lnk.title || lnk.domain) + '</div>' +
+            '<div class="link-card-domain"><i class="fas fa-arrow-up-right-from-square" style="font-size:9px;"></i>' + escapeHTML(lnk.domain) + '</div>' +
+          '</div>' +
+          '<i class="fas fa-chevron-right link-card-arrow"></i>';
+        linksContainer.appendChild(card);
+      });
+      attSlot.appendChild(linksContainer);
+    }
+
+    // Like
+    postDiv.querySelector(".like-btn").addEventListener("click", function() {
+      post.liked = !post.liked;
+      post.likes += post.liked ? 1 : -1;
+      var icon = this.querySelector("i");
+      if (post.liked) { icon.classList.add("heart-anim"); setTimeout(function() { icon.classList.remove("heart-anim"); }, 400); }
+      saveData();
+      renderFeed();
+    });
+
+    // Reply toggle
+    postDiv.querySelector(".reply-toggle-btn").addEventListener("click", function() {
+      post.replyOpen = !post.replyOpen;
+      renderFeed();
+    });
+
+    // Delete
+    postDiv.querySelector(".delete-btn").addEventListener("click", function() {
+      showDeleteConfirm("Utas ini dan semua balasannya akan dihapus permanen.", "Hapus", function() {
+        posts = posts.filter(function(p) { return p.id !== post.id; });
+        saveData();
+        showToast("Utas dihapus.");
+        renderFeed();
+      });
+    });
+
+    wrapper.appendChild(postDiv);
+
+    // Replies section
+    if (post.replies.length > 0 || post.replyOpen) {
+      var repliesSection = document.createElement("div");
+      repliesSection.className = "replies-section";
+
+      post.replies.forEach(function(reply) {
+        var replyEl = document.createElement("div");
+        replyEl.className = "reply-item";
+        replyEl.innerHTML =
+          '<div class="reply-inner">' +
+            '<div class="avatar sm">A</div>' +
+            '<div class="reply-content">' +
+              '<div class="reply-header">' +
+                '<span class="reply-author">Naufal Muhammad Al Hikam</span>' +
+                '<span class="reply-time">' + timeAgo(reply.timestamp) + '</span>' +
+              '</div>' +
+              (reply.text ? '<div class="reply-text">' + escapeHTML(reply.text) + '</div>' : '') +
+              '<div class="reply-attachments-slot"></div>' +
+              '<div class="reply-actions">' +
+                '<button class="action-btn like-btn ' + (reply.liked ? 'liked' : '') + '">' +
+                  '<i class="' + (reply.liked ? 'fas' : 'far') + ' fa-heart"></i>' +
+                  '<span class="count">' + (reply.likes > 0 ? reply.likes : '') + '</span>' +
+                '</button>' +
+                '<button class="action-btn delete-btn">' +
+                  '<i class="far fa-trash-can"></i>' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+        var rAttSlot = replyEl.querySelector(".reply-attachments-slot");
+        if (reply.attachments && reply.attachments.length > 0) {
+          var rAttEl = buildAttachmentsHTML(reply.attachments, "sm");
+          if (rAttEl) rAttSlot.appendChild(rAttEl);
+        }
+
+        replyEl.querySelector(".like-btn").addEventListener("click", function() {
+          reply.liked = !reply.liked;
+          reply.likes += reply.liked ? 1 : -1;
+          var icon = this.querySelector("i");
+          if (reply.liked) { icon.classList.add("heart-anim"); setTimeout(function() { icon.classList.remove("heart-anim"); }, 400); }
+          saveData();
+          renderFeed();
+        });
+
+        replyEl.querySelector(".delete-btn").addEventListener("click", function() {
+          showDeleteConfirm("Balasan ini akan dihapus permanen.", "Hapus", function() {
+            post.replies = post.replies.filter(function(r) { return r.id !== reply.id; });
+            saveData();
+            showToast("Balasan dihapus.");
+            renderFeed();
+          });
+        });
+
+        repliesSection.appendChild(replyEl);
+      });
+
+      // Reply composer
+      if (post.replyOpen) {
+        var pendingReplyAttachments = [];
+
+        var replyComposer = document.createElement("div");
+        replyComposer.className = "reply-composer";
+
+        var replyRow = document.createElement("div");
+        replyRow.className = "reply-composer-row";
+        replyRow.innerHTML =
+          '<div class="avatar sm">A</div>' +
+          '<textarea class="reply-input" placeholder="Tulis balasan..." rows="1"></textarea>' +
+          '<div class="reply-tools">' +
+            '<button class="tool-btn reply-attach-btn" title="Lampirkan"><i class="fas fa-paperclip"></i></button>' +
+            '<input type="file" class="reply-attach-input" multiple accept="image/*,.pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx" style="display:none;">' +
+          '</div>' +
+          '<button class="reply-send-btn" disabled><i class="fas fa-arrow-up"></i></button>';
+
+        var replyAttachPreview = document.createElement("div");
+        replyAttachPreview.className = "attachment-preview-area";
+
+        replyComposer.appendChild(replyRow);
+        replyComposer.appendChild(replyAttachPreview);
+
+        var replyTextarea = replyRow.querySelector(".reply-input");
+        var sendBtn = replyRow.querySelector(".reply-send-btn");
+        var replyAttachBtn = replyRow.querySelector(".reply-attach-btn");
+        var replyAttachInputEl = replyRow.querySelector(".reply-attach-input");
+
+        function updateSendBtn() {
+          sendBtn.disabled = replyTextarea.value.trim().length === 0 && pendingReplyAttachments.length === 0;
+        }
+
+        replyTextarea.addEventListener("input", function() {
+          updateSendBtn();
+          autoResize(replyTextarea);
+        });
+
+        replyAttachBtn.addEventListener("click", function() { replyAttachInputEl.click(); });
+
+        replyAttachInputEl.addEventListener("change", function() {
+          Array.from(replyAttachInputEl.files).forEach(function(file) {
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+              pendingReplyAttachments.push({
+                name: file.name,
+                type: file.type,
+                data: ev.target.result,
+                isImage: file.type.startsWith("image/"),
+                size: file.size
+              });
+              renderReplyAttachPreview();
+              updateSendBtn();
+            };
+            reader.readAsDataURL(file);
+          });
+          replyAttachInputEl.value = "";
+        });
+
+        function renderReplyAttachPreview() {
+          replyAttachPreview.innerHTML = "";
+          pendingReplyAttachments.forEach(function(att, idx) {
+            var thumb = document.createElement("div");
+            thumb.className = "attach-thumb";
+            if (att.isImage) {
+              thumb.innerHTML = '<img src="' + att.data + '" alt="' + escapeHTML(att.name) + '">';
+            } else {
+              thumb.innerHTML = '<div class="file-thumb"><i class="' + fileIcon(att.type) + '"></i><span class="file-name">' + escapeHTML(att.name) + '</span></div>';
+            }
+            var removeBtn = document.createElement("button");
+            removeBtn.className = "attach-remove";
+            removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            removeBtn.addEventListener("click", function() {
+              pendingReplyAttachments.splice(idx, 1);
+              renderReplyAttachPreview();
+              updateSendBtn();
+            });
+            thumb.appendChild(removeBtn);
+            replyAttachPreview.appendChild(thumb);
+          });
+        }
+
+        function submitReply() {
+          var text = replyTextarea.value.trim();
+          if (!text && pendingReplyAttachments.length === 0) return;
+          post.replies.push({
+            id: nextId++,
+            text: text,
+            attachments: pendingReplyAttachments.slice(),
+            likes: 0,
+            liked: false,
+            timestamp: Date.now()
+          });
+          pendingReplyAttachments = [];
+          saveData();
+          showToast("Balasan ditambahkan.");
+          renderFeed();
+        }
+
+        sendBtn.addEventListener("click", submitReply);
+        replyTextarea.addEventListener("keydown", function(e) {
+          if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitReply(); }
+        });
+
+        repliesSection.appendChild(replyComposer);
+      }
+
+      wrapper.appendChild(repliesSection);
+    }
+
+    return wrapper;
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────
+  if (posts.length === 0) {
+    posts = [
+      {
+        id: nextId++,
+        text: "Selamat datang di Utas — tempat pribadi untuk menuangkan pikiran, refleksi, dan ceritamu. Semua tersimpan lokal di perangkatmu. ✨",
+        mood: { emoji: "🥰", label: "Bersyukur" },
+        attachments: [],
+        likes: 1,
+        liked: true,
+        replies: [
+          {
+            id: nextId++,
+            text: "Fitur baru: karakter tidak terbatas, lampiran gambar & file (tersimpan otomatis), serta ekspor/impor semua data termasuk lampiran. Coba klik ikon 📎 di composer!",
+            attachments: [],
+            likes: 0,
+            liked: false,
+            timestamp: Date.now() - 120000
+          }
+        ],
+        replyOpen: false,
+        timestamp: Date.now() - 300000
+      }
+    ];
+    saveData();
+  }
+
+  renderFeed();
+  setInterval(renderFeed, 60000);
+
+})();
+</script>
+</body>
+</html>
