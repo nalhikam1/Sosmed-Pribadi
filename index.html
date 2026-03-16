@@ -1841,17 +1841,12 @@
 
   // ── Time ago ──────────────────────────────────────────────────────
   function timeAgo(ts) {
-    var diff = Date.now() - ts;
-    var sec = Math.floor(diff / 1000);
-    if (sec < 60) return "baru saja";
-    var min = Math.floor(sec / 60);
-    if (min < 60) return min + "m";
-    var hr = Math.floor(min / 60);
-    if (hr < 24) return hr + "j";
-    var day = Math.floor(hr / 24);
-    if (day < 30) return day + "h";
-    var month = Math.floor(day / 30);
-    return month + "bln";
+    var d = new Date(ts);
+    var days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    var months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    var hh = d.getHours().toString().padStart(2,'0');
+    var mm = d.getMinutes().toString().padStart(2,'0');
+    return hh + ':' + mm + '. ' + days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
   }
 
   // ── Toast ─────────────────────────────────────────────────────────
@@ -2047,7 +2042,7 @@
         var faviconUrl = getFaviconUrl(lnk.url);
         card.innerHTML =
           (faviconUrl
-            ? '<img class="link-card-favicon" src="' + faviconUrl + '" onerror="this.outerHTML=\'<div class=\\\"link-card-favicon-fallback\\\"><i class=\\\"fas fa-globe\\\"></i></div>\'">'
+            ? '<img class="link-card-favicon" src="' + faviconUrl + '" onerror="this.outerHTML=\'<div class=&quot;link-card-favicon-fallback&quot;><i class=&quot;fas fa-globe&quot;></i></div>\'">'
             : '<div class="link-card-favicon-fallback"><i class="fas fa-globe"></i></div>') +
           '<div class="link-card-info">' +
             '<div class="link-card-title">' + escapeHTML(lnk.title || lnk.domain) + '</div>' +
